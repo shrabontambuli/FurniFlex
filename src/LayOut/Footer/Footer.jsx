@@ -3,7 +3,7 @@ import React from 'react';
 const Footer = () => {
     return (
         <div className='bg py-16'>
-            <footer className="footer text-base-content container mx-auto">
+            <footer className="footer text-base-content max-w-screen-xl mx-auto">
                 <aside className='w-96'>
                     <img className='w-44' src="/icons/footer.png" alt="" />
                 </aside>
@@ -30,8 +30,8 @@ const Footer = () => {
                     <a className="link link-hover text-c">Special Cases</a>
                 </nav>
             </footer>
-            <div className='border container mx-auto my-14'></div>
-            <footer className='container mx-auto'>
+            <div className='border max-w-screen-xl mx-auto my-14'></div>
+            <footer className='max-w-screen-xl mx-auto'>
                 <div className='text-lg font-medium text-c flex items-center justify-between'>
                     <div className='flex items-center gap-4'>
                         <img className='w-5 h-5' src="/icons/fb.png" alt="" />
