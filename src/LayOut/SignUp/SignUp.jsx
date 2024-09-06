@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Form, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../providers/AuthProvider';
+import axios from 'axios';
 
 const SignUp = () => {
     const { register, handleSubmit, reset } = useForm();
@@ -19,15 +20,19 @@ const SignUp = () => {
                 updateProfile(loggedUser, {
                     displayName: data.name, photoURL: imgURL
                 })
-
-
-
-
                 const saveUser = { first_ame: data.firstName, last_ame: data.lastName, email: data.email, check: data.checked }
                 console.log(saveUser);
+                axios.post('http://localhost:5000/users', saveUser)
+                    .then(data => {
+                        if (data.data.insertedId) {
+                            navigate(from);
+                        }
+                    })
+                    .catch((error) => {
+                        return (error);
+
+                    })
             });
-
-
     }
 
     const handleGoogle = () => {
@@ -35,7 +40,7 @@ const SignUp = () => {
             .then(result => {
                 const loggedInUser = result.user;
                 const saveUser = { name: loggedInUser.displayName, email: loggedInUser.email }
-                axios.post('https://rokomari-server.vercel.app/users', saveUser)
+                axios.post('http://localhost:5000/users', saveUser)
                     .then((data) => {
                         if (data.data.insertedId) {
                             navigate(from);
@@ -111,8 +116,8 @@ const SignUp = () => {
                                     type="checkbox"
                                     name="agreeToTerms"
                                     {...register("checked", { required: true })}
-                                    // checked={formData.agreeToTerms}
-                                    // onChange={handleChange}
+                                // checked={formData.agreeToTerms}
+                                // onChange={handleChange}
                                 />
                                 <p className='font-medium'>I agree to the <span className='underline'>Terms & Policy</span></p>
                             </label>

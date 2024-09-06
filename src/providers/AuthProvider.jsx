@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { createContext, useEffect, useState } from "react";
 import app from "../firebase/firebase.init";
 import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import axios from 'axios';
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
@@ -10,6 +11,7 @@ const provider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
     const [showPassword, setShowPassword] = useState(false);
+    const [product, setProduct] = useState([]);
 
 
     const [user, setUser] = useState(null);
@@ -46,7 +48,12 @@ const AuthProvider = ({ children }) => {
         }
     }, [])
 
-
+    useEffect(() => {
+        axios.get('http://localhost:5000/products')
+            .then(res => {
+                setProduct(res.data);
+            });
+    }, []);
 
 
     const authInfo = {
@@ -57,7 +64,8 @@ const AuthProvider = ({ children }) => {
         googleSignIn,
         logOut,
         showPassword,
-        setShowPassword
+        setShowPassword,
+        product,
     };
 
     return (

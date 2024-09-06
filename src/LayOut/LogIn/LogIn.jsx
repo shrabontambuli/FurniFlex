@@ -2,14 +2,15 @@ import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../providers/AuthProvider';
+import axios from 'axios';
 
 const LogIn = () => {
-    const { register, handleSubmit, reset } = useForm();
+    const { register, handleSubmit } = useForm();
     const { signIn, googleSignIn, showPassword, setShowPassword } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
-    
+
 
     const onSubmit = (data) => {
         signIn(data.email, data.password)
@@ -27,7 +28,7 @@ const LogIn = () => {
             .then(result => {
                 const loggedInUser = result.user;
                 const saveUser = { name: loggedInUser.displayName, email: loggedInUser.email }
-                axios.post('https://rokomari-server.vercel.app/users', saveUser)
+                axios.post('http://localhost:5000/users', saveUser)
                     .then((data) => {
                         if (data.data.message) {
                             navigate(from);
