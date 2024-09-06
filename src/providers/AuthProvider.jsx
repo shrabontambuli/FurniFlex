@@ -3,6 +3,7 @@ import { createContext, useEffect, useState } from "react";
 import app from "../firebase/firebase.init";
 import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
@@ -16,9 +17,11 @@ const AuthProvider = ({ children }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [productData, setProductData] = useState([]);
     const [product, setProduct] = useState([]);
+    const [cart, setCart] = useState([]);
     const [active, setActive] = useState([]);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
 
 
     // Authentication System //
@@ -65,6 +68,9 @@ const AuthProvider = ({ children }) => {
             });
     }, []);
 
+
+
+
     // filtering data //
 
     const handleChair = () => {
@@ -81,6 +87,46 @@ const AuthProvider = ({ children }) => {
     };
 
 
+    // const handleSelect = p => {
+    //     const { _id, name, price, picture } = p;
+    //     const remaining = cart?.filter(d => d?.selectId !== p?._id);
+    //     if (!remaining) {
+    //         const selectedProduct = { selectId: _id, name, price, picture }
+    //         axios.post('http://localhost:5000/selects', selectedProduct)
+    //             .then(data => {
+    //                 if (data?.data?.insertedId) {
+    //                     Swal.fire({
+    //                         position: 'center',
+    //                         icon: 'success',
+    //                         title: 'Product Add To Cart',
+    //                         showConfirmButton: false,
+    //                         timer: 1500
+    //                     })
+    //                 }
+    //             })
+    //     }
+    //     else {
+    //         Swal.fire({
+    //             title: "Already Added To Cart",
+    //             showClass: {
+    //                 popup: `
+    //                     animate__animated
+    //                     animate__fadeInUp
+    //                     animate__faster
+    //                   `
+    //             },
+    //             hideClass: {
+    //                 popup: `
+    //                     animate__animated
+    //                     animate__fadeOutDown
+    //                     animate__faster
+    //                   `
+    //             }
+    //         });
+    //     }
+
+    // }
+
     const authInfo = {
         user,
         loading,
@@ -91,11 +137,15 @@ const AuthProvider = ({ children }) => {
         showPassword,
         setShowPassword,
         product,
+        cart,
+        setCart,
         active,
         setActive,
         handleChair,
         handleClothing,
-        handleElectronics
+        handleElectronics,
+        
+        // handleAddToCart
     };
 
     return (

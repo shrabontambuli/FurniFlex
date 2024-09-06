@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import Logo from "/icons/Logo.png";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 
 const Navbar = () => {
-    const { user, logOut } = useContext(AuthContext);
+    const { user, logOut, cart, setCart } = useContext(AuthContext);
 
     const navOptions = <>
         <li className="text-xl font-medium"><Link to="/">Home</Link></li>
@@ -19,6 +19,13 @@ const Navbar = () => {
             .then()
             .catch(error => (error))
     }
+    const url = (`http://localhost:5000/cart?email=${user?.email}`)
+    useEffect(() => {
+        fetch(url)
+            .then(res => res.json())
+            .then(data => setCart(data))
+    }, [cart])
+
 
     return (
         <div className="border-b-2">
@@ -63,7 +70,7 @@ const Navbar = () => {
                                 </svg>
                                 <div className="absolute -bottom-2 -right-2">
                                     <div className="bg-black flex justify-center items-center rounded-full w-6 h-6">
-                                        <span className="text-white">8</span>
+                                        <span className="text-white">{cart?.length || 0}</span>
                                     </div>
                                 </div>
                             </div>

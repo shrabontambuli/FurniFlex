@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../../providers/AuthProvider';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const Cart = () => {
+    const { user, cart, setCart } = useContext(AuthContext);
     const [quantity, setQuantity] = useState(1);
 
     // Function to increase the quantity
@@ -15,39 +19,80 @@ const Cart = () => {
         }
     };
 
+    useEffect(() => {
+        axios.get(`http://localhost:5000/cart?email=${user.email}`)
+            .then(res => {
+                setCart(res.data);
+            });
+    }, []);
+
+    const handleDelete = (item) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`http://localhost:5000/cart/${item._id}`)
+                    .then(data => {
+                        if (data?.data?.deletedCount > 0) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your file has been deleted.',
+                                'success'
+                            )
+                        }
+                        
+                        axios.get(`http://localhost:5000/cart?email=${user.email}`)
+                            .then(res => {
+                                setCart(res.data)
+                            });
+                    })
+            }
+        })
+    }
+
+
     return (
         <div className='grid grid-cols-4 mt-10 mb-20 gap-4'>
             <div className='col-span-3 w-11/12'>
                 <h1 className='text-3xl font-medium'>An overview of your order</h1>
                 <div className='bg-[#DEDEDE] mt-7 p-6 pt-2 rounded-xl'>
-                    <div className='border-b-2 border-[#ECECEC] pb-4 mt-6'>
-                        <div className='flex justify-between'>
-                            <div className='flex gap-4'>
-                                <div className='flex items-center gap-6'>
-                                    <div className='bg-white border border-[#DEDEDE] rounded-xl h-12 w-24 text-center py-2'>
-                                        <button className='text-xl' onClick={decreaseQuantity} disabled={quantity === 1}>
-                                            -
-                                        </button>
-                                        <span className='font-semibold' style={{ margin: '0 10px' }}>{quantity}</span>
-                                        <button className='text-xl' onClick={increaseQuantity}>+</button>
+                    {
+                        cart?.map(p =>
+                            <div key={p._id} className='border-b-2 border-[#ECECEC] pb-4 mt-6'>
+                                <div className='flex justify-between'>
+                                    <div className='flex gap-4'>
+                                        <div className='flex items-center gap-6'>
+                                            <div className='bg-white border border-[#DEDEDE] rounded-xl h-12 w-24 text-center py-2'>
+                                                <button className='text-xl' onClick={decreaseQuantity} disabled={quantity === 1}>
+                                                    -
+                                                </button>
+                                                <span className='font-semibold' style={{ margin: '0 10px' }}>{quantity}</span>
+                                                <button className='text-xl' onClick={increaseQuantity}>+</button>
+                                            </div>
+                                            <div className='w-20 h-20 bg-[#F2F2F2] flex justify-center items-center rounded-lg mx-auto'>
+                                                <img
+                                                    src={p?.picture}
+                                                    alt="product"
+                                                    className="rounded-xl" />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h1 className='text-base font-semibold'>{p?.name}</h1>
+                                        </div>
                                     </div>
-                                    <div className='w-20 h-20 bg-[#F2F2F2] flex justify-center items-center rounded-lg mx-auto'>
-                                        <img
-                                            src="public/icons/image.png"
-                                            alt="product"
-                                            className="rounded-xl" />
+                                    <div>
+                                        <img onClick={() => handleDelete(p)} src="/icons/x.png" alt="" />
                                     </div>
                                 </div>
-                                <div>
-                                    <h1 className='text-base font-semibold'>Recliner Chair Steel</h1>
-                                </div>
-                            </div>
-                            <div>
-                                <img src="/icons/x.png" alt="" />
-                            </div>
-                        </div>
-                        <h1 className='text-xl font-bold text-right mt-3'>€299.00</h1>
-                    </div>
+                                <h1 className='text-xl font-bold text-right mt-3'>€{p?.price}.00</h1>
+                            </div>)
+                    }
                 </div>
             </div>
             <div>
