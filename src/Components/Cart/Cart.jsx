@@ -73,7 +73,7 @@ const Cart = () => {
                 </div>
                 <div className="card-actions mt-5">
                     <button className="btn bg-[#202020] text-white w-full">
-                        <img src="/icons/Added.png" alt="" />Add to cart</button>
+                        <img src="/icons/Added.png" alt="" />Go To Checkout</button>
                 </div>
             </div>
         </div>
