@@ -2,7 +2,8 @@ import React, { useContext } from 'react';
 import { AuthContext } from '../../providers/AuthProvider';
 
 const Home = () => {
-    const { product } = useContext(AuthContext);
+    const { product, active, setActive, handleChair, handleClothing, handleElectronics } = useContext(AuthContext);
+   
 
     return (
         <div className='my-12'>
@@ -10,15 +11,15 @@ const Home = () => {
                 <div className='border-e text-center'>
                     <div className='text-[#717171]'>
 
-                        <button className='btn bg-[#0E0E0E] text-white text-xl w-64 active'>Chair</button>
+                        <button onClick={() => handleChair(setActive(1))} className={active===1?"btn bg-[#0E0E0E] text-white text-xl w-64 active":"btn text-xl w-64"}>Chair</button>
 
                         <hr className='w-64 mx-auto mt-2' />
 
-                        <button className='mt-2 bg-transparent border-none shadow-none btn w-64 text-xl font-medium'>Clothing</button>
+                        <button onClick={() => handleClothing(setActive(2))} className={active===2?"btn bg-[#0E0E0E] text-white text-xl w-64 mt-2 active":"btn text-xl w-64 mt-2"}>Clothing</button>
 
                         <hr className='w-64 mx-auto mt-2' />
 
-                        <button className='mt-2 btn bg-transparent border-none shadow-none w-64 text-xl font-medium'>Electronics</button>
+                        <button onClick={() => handleElectronics(setActive(3))} className={active===3?"btn bg-[#0E0E0E] text-white text-xl w-64 mt-2 active":"btn text-xl w-64 mt-2"}>Electronics</button>
                     </div>
                 </div>
                 <div className='col-span-3'>

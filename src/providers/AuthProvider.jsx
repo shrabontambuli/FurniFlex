@@ -10,12 +10,18 @@ const provider = new GoogleAuthProvider();
 
 
 const AuthProvider = ({ children }) => {
+
+    // All state management functions// 
+
     const [showPassword, setShowPassword] = useState(false);
+    const [productData, setProductData] = useState([]);
     const [product, setProduct] = useState([]);
-
-
+    const [active, setActive] = useState([]);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
+
+    // Authentication System //
 
     const createUser = (email, password) => {
         setLoading(true);
@@ -48,12 +54,31 @@ const AuthProvider = ({ children }) => {
         }
     }, [])
 
+
+    // fetch databases data //
+
     useEffect(() => {
         axios.get('http://localhost:5000/products')
             .then(res => {
+                setProductData(res.data);
                 setProduct(res.data);
             });
     }, []);
+
+    // filtering data //
+
+    const handleChair = () => {
+        const chairData = productData.filter(p => p.category === "Chair")
+        setProduct(chairData);
+    };
+    const handleClothing = () => {
+        const clothingData = productData.filter(p => p.category === "Cloth")
+        setProduct(clothingData);
+    };
+    const handleElectronics = () => {
+        const clothingData = productData.filter(p => p.category === "Electronic")
+        setProduct(clothingData);
+    };
 
 
     const authInfo = {
@@ -66,6 +91,11 @@ const AuthProvider = ({ children }) => {
         showPassword,
         setShowPassword,
         product,
+        active,
+        setActive,
+        handleChair,
+        handleClothing,
+        handleElectronics
     };
 
     return (
