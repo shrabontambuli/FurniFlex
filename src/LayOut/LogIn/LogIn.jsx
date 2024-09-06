@@ -1,32 +1,39 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../providers/AuthProvider';
 
 const LogIn = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const { register } = useForm();
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-        agreeToTerms: false,
-    });
+    const { register, handleSubmit, reset } = useForm();
+    const { signIn, googleSignIn, showPassword, setShowPassword } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/';
+    
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
-            [name]: type === "checkbox" ? checked : value,
-        });
+    const onSubmit = (data) => {
+        signIn(data.email, data.password)
+            .then(result => {
+                const user = result.user;
+                if (user) {
+                    navigate(from, { replace: true })
+                }
+            })
+            .catch(err => console.log(err))
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (formData.agreeToTerms) {
-            alert(`Sign-up successful! Name: ${formData.name}, Email: ${formData.email}`);
-        } else {
-            alert("You must agree to the terms and conditions to sign up.");
-        }
+    const handleGoogle = () => {
+        googleSignIn()
+            .then(result => {
+                const loggedInUser = result.user;
+                const saveUser = { name: loggedInUser.displayName, email: loggedInUser.email }
+                axios.post('https://rokomari-server.vercel.app/users', saveUser)
+                    .then((data) => {
+                        if (data.data.message) {
+                            navigate(from);
+                        }
+                    })
+            })
     };
 
 
@@ -39,12 +46,12 @@ const LogIn = () => {
                         <p className='text-[#707070] text-lg'>Enter your Credentials to access your account</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className='mt-6'>
+                    <form onSubmit={handleSubmit(onSubmit)} className='mt-6'>
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Email address</span>
                             </label>
-                            <input type="email" placeholder="Email address" className="input input-bordered" required />
+                            <input type="email" {...register("email", { required: true })} placeholder="Email address" className="input input-bordered" required />
                         </div>
                         <div className="form-control relative">
                             <label className="label">
@@ -58,7 +65,7 @@ const LogIn = () => {
                             })} placeholder="password"
                                 name="password" className="input input-bordered relative" />
                             <span
-                                className="absolute top-2/4 right-3 transform -translate-y-1/2 cursor-pointer"
+                                className="absolute top-[50%] right-3 transform -translate-y-2/3 cursor-pointer"
                                 onClick={() => setShowPassword(!showPassword)}
                             >
                                 {
@@ -80,8 +87,9 @@ const LogIn = () => {
                                 <input
                                     type="checkbox"
                                     name="agreeToTerms"
-                                    checked={formData.agreeToTerms}
-                                    onChange={handleChange}
+                                    {...register("checked", { required: true })}
+                                // checked={formData.agreeToTerms}
+                                // onChange={handleChange}
                                 />
                                 <p className='font-medium'>I agree to the <span className='underline'>Terms & Policy</span></p>
                             </label>
@@ -91,18 +99,19 @@ const LogIn = () => {
                                 <button className="btn bg-[#202020] text-white w-full">Sign In</button>
                             </div>
                             <div className="divider text-sm mt-2">OR</div>
-                            <div className='flex items-center gap-4 -mt-2'>
-                                <div className="card-actions w-full">
-                                    <button className="btn border border-[#D9D9D9] w-full">
-                                        <img src="/icons/google.png" alt="" />Sign in with Google</button>
-                                </div>
-                                <div className="card-actions w-full">
-                                    <button className="btn border border-[#D9D9D9] w-full">
-                                        <img src="/icons/apple.png" alt="" />Sign in with Apple</button>
-                                </div>
-                            </div>
+
                         </div>
                     </form>
+                    <div className='flex items-center gap-4 -mt-2'>
+                        <div className="card-actions w-full">
+                            <button onClick={handleGoogle} className="btn border border-[#D9D9D9] w-full">
+                                <img src="/icons/google.png" alt="" />Sign in with Google</button>
+                        </div>
+                        <div className="card-actions w-full">
+                            <button className="btn border border-[#D9D9D9] w-full">
+                                <img src="/icons/apple.png" alt="" />Sign in with Apple</button>
+                        </div>
+                    </div>
                     <h4 className='mt-5 font-medium text-center'>Have an account?  <Link className='text-[#0F3DDE]' to="/signup">Sign Up</Link></h4>
                 </div>
             </div>

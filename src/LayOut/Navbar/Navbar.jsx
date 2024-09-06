@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import Logo from "/icons/Logo.png";
+import { useContext } from "react";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const Navbar = () => {
+    const { user, logOut } = useContext(AuthContext);
+
     const navOptions = <>
         <li className="text-xl font-medium"><Link to="/">Home</Link></li>
         <li className="text-xl font-medium"><Link to="/">Products</Link></li>
@@ -9,6 +13,13 @@ const Navbar = () => {
         <li className="text-xl font-medium"><Link to="/">Custom</Link></li>
         <li className="text-xl font-medium"><Link to="/">Blog</Link></li>
     </>
+
+    const handleLogOut = () => {
+        logOut()
+            .then()
+            .catch(error => (error))
+    }
+
     return (
         <div className="border-b-2">
             <div className="navbar bg-base-100 py-4 max-w-screen-xl mx-auto">
@@ -57,12 +68,19 @@ const Navbar = () => {
                                 </div>
                             </div>
                         </Link>
-                        <div className="w-12 rounded-full">
-                            <img
-                                className="w-12 rounded-full"
-                                alt="Tailwind CSS Navbar component"
-                                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                        </div>
+                        {
+                            user ? <div className="flex items-center gap-6">
+                                <div className="w-12 rounded-full">
+                                    <img
+                                        className="w-12 rounded-full"
+                                        alt="img"
+                                        src={user?.photoURL} />
+                                </div>
+                                <button onClick={handleLogOut} className="btn font-medium">LogOut</button>
+                            </div>
+                                :
+                                <Link to="/login" className="btn font-medium">Sign In</Link>
+                        }
                     </div>
                 </div>
             </div>

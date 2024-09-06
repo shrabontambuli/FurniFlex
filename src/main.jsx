@@ -11,6 +11,7 @@ import Cart from './Components/Cart/Cart.jsx';
 import LogIn from './LayOut/LogIn/LogIn.jsx';
 import SignUp from './LayOut/SignUp/SignUp.jsx';
 import AuthProvider from './providers/AuthProvider.jsx';
+import PrivateRoute from './Components/PrivateRoute/PrivateRoute.jsx';
 
 const router = createBrowserRouter([
   {
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/cart",
-        element: <Cart />,
+        element: <PrivateRoute><Cart/></PrivateRoute>,
       },
     ],
   },
