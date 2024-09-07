@@ -5,9 +5,11 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const Home = () => {
-    const { user, product, active, setActive, handleChair, handleClothing, handleElectronics, setCart, cart } = useContext(AuthContext);
+    const { user, product, active, setActive, handleChair, handleClothing, handleElectronics, setCart } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
+
+    // Add to cart with condition //
 
     const handleAddToCart = (p) => {
         if (user && user.email) {
@@ -23,7 +25,6 @@ const Home = () => {
             }
             axios.post('http://localhost:5000/cart', cartItem)
                 .then(res => {
-                    console.log({res})
                     if (res.data._id) {
                         setCart((prev) => [...prev, res.data]);
                         Swal.fire({
@@ -34,7 +35,7 @@ const Home = () => {
                             timer: 1500
                         });
                     }
-                    else{
+                    else {
                         Swal.fire({
                             position: "center",
                             icon: "error",

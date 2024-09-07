@@ -1,16 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../providers/AuthProvider';
 import axios from 'axios';
 
 const SignUp = () => {
-    const { register, handleSubmit, reset } = useForm();
+    const { register, handleSubmit } = useForm();
     const { createUser, googleSignIn, showPassword, setShowPassword } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
 
+    // sign up with email and password //
 
     const onSubmit = (data) => {
         createUser(data.email, data.password)
@@ -34,6 +35,8 @@ const SignUp = () => {
                     })
             });
     }
+
+    // sign up with Google //
 
     const handleGoogle = () => {
         googleSignIn()
@@ -140,7 +143,7 @@ const SignUp = () => {
                                 <img src="/icons/apple.png" alt="" />Sign in with Apple</button>
                         </div>
                     </div>
-                    <h4 className='mt-3 font-medium'>Have an account?  <Link className='text-[#0F3DDE]' to="/login">Sign In</Link></h4>
+                    <h4 className='mt-3 font-medium'>Have an account?  <Link className='text-[#0F3DDE]' to="/signin">Sign In</Link></h4>
                 </div>
             </div>
             <div className='w-full relative'>

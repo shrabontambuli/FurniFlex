@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../providers/AuthProvider';
@@ -11,6 +11,7 @@ const LogIn = () => {
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
 
+    // sign in with email and password //
 
     const onSubmit = (data) => {
         signIn(data.email, data.password)
@@ -22,6 +23,8 @@ const LogIn = () => {
             })
             .catch(err => console.log(err))
     };
+
+    // sign up with Google //
 
     const handleGoogle = () => {
         googleSignIn()

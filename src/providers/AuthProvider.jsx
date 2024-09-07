@@ -3,7 +3,6 @@ import { createContext, useEffect, useState } from "react";
 import app from "../firebase/firebase.init";
 import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import axios from 'axios';
-import Swal from 'sweetalert2';
 
 export const AuthContext = createContext(null);
 const auth = getAuth(app);
@@ -22,8 +21,7 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-
-
+    
     // Authentication System //
 
     const createUser = (email, password) => {
@@ -86,6 +84,9 @@ const AuthProvider = ({ children }) => {
         setProduct(clothingData);
     };
 
+    // cart pricing //
+
+    const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
     // function System
     const handleLogOut = () => {
@@ -94,46 +95,29 @@ const AuthProvider = ({ children }) => {
             .catch(error => (error))
     }
 
+    // Function to increase the quantity
+    const increaseQuantity = (id) => {
+        const updatedQuantity = cart.map(item => {
+            if (item._id === id) {
+                return { ...item, quantity: item.quantity + 1 };
+            }
+            return item;
+        })
+        setCart(updatedQuantity);
+    };
 
-    // const handleSelect = p => {
-    //     const { _id, name, price, picture } = p;
-    //     const remaining = cart?.filter(d => d?.selectId !== p?._id);
-    //     if (!remaining) {
-    //         const selectedProduct = { selectId: _id, name, price, picture }
-    //         axios.post('http://localhost:5000/selects', selectedProduct)
-    //             .then(data => {
-    //                 if (data?.data?.insertedId) {
-    //                     Swal.fire({
-    //                         position: 'center',
-    //                         icon: 'success',
-    //                         title: 'Product Add To Cart',
-    //                         showConfirmButton: false,
-    //                         timer: 1500
-    //                     })
-    //                 }
-    //             })
-    //     }
-    //     else {
-    //         Swal.fire({
-    //             title: "Already Added To Cart",
-    //             showClass: {
-    //                 popup: `
-    //                     animate__animated
-    //                     animate__fadeInUp
-    //                     animate__faster
-    //                   `
-    //             },
-    //             hideClass: {
-    //                 popup: `
-    //                     animate__animated
-    //                     animate__fadeOutDown
-    //                     animate__faster
-    //                   `
-    //             }
-    //         });
-    //     }
+    // Function to decrease the quantity
+    const decreaseQuantity = (id) => {
+        const updatedQuantity = cart.map(item => {
+            if (item._id === id && item.quantity > 1) {
+                return { ...item, quantity: item.quantity - 1 };
+            }
+            return item;
+        })
+        setCart(updatedQuantity);
+    };
 
-    // }
+
 
     const authInfo = {
         user,
@@ -153,8 +137,9 @@ const AuthProvider = ({ children }) => {
         handleChair,
         handleClothing,
         handleElectronics,
-
-        // handleAddToCart
+        totalPrice,
+        increaseQuantity,
+        decreaseQuantity
     };
 
     return (

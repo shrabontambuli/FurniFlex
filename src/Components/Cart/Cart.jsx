@@ -4,32 +4,9 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 const Cart = () => {
-    const { user, cart, setCart } = useContext(AuthContext);
+    const { user, cart, setCart, totalPrice, increaseQuantity, decreaseQuantity } = useContext(AuthContext);
 
-
-    const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
-
-    // Function to increase the quantity
-    const increaseQuantity = (id) => {
-        const updatedQuantity = cart.map(item => {
-            if (item._id === id) {
-                return { ...item, quantity: item.quantity + 1 };
-            }
-            return item;
-        })
-        setCart(updatedQuantity);
-    };
-
-    // Function to decrease the quantity
-    const decreaseQuantity = (id) => {
-        const updatedQuantity = cart.map(item => {
-            if (item._id === id && item.quantity > 1) {
-                return { ...item, quantity: item.quantity - 1 };
-            }
-            return item;
-        })
-        setCart(updatedQuantity);
-    };
+    // fetching user add to cart her data //
 
     useEffect(() => {
         axios.get(`http://localhost:5000/cart?email=${user.email}`)
@@ -37,6 +14,8 @@ const Cart = () => {
                 setCart(res.data);
             });
     }, []);
+
+    // handle delete  cart item //
 
     const handleDelete = (item) => {
         Swal.fire({
