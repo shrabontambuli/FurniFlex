@@ -87,6 +87,14 @@ const AuthProvider = ({ children }) => {
     };
 
 
+    // function System
+    const handleLogOut = () => {
+        logOut()
+            .then()
+            .catch(error => (error))
+    }
+
+
     // const handleSelect = p => {
     //     const { _id, name, price, picture } = p;
     //     const remaining = cart?.filter(d => d?.selectId !== p?._id);
@@ -134,6 +142,7 @@ const AuthProvider = ({ children }) => {
         signIn,
         googleSignIn,
         logOut,
+        handleLogOut,
         showPassword,
         setShowPassword,
         product,
@@ -144,7 +153,7 @@ const AuthProvider = ({ children }) => {
         handleChair,
         handleClothing,
         handleElectronics,
-        
+
         // handleAddToCart
     };
 

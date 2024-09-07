@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import Logo from "/icons/Logo.png";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
 
 const Navbar = () => {
-    const { user, logOut, cart, setCart } = useContext(AuthContext);
+    const { user, cart, handleLogOut } = useContext(AuthContext);
 
     const navOptions = <>
         <li className="text-xl font-medium"><Link to="/">Home</Link></li>
@@ -13,18 +13,6 @@ const Navbar = () => {
         <li className="text-xl font-medium"><Link to="/">Custom</Link></li>
         <li className="text-xl font-medium"><Link to="/">Blog</Link></li>
     </>
-
-    const handleLogOut = () => {
-        logOut()
-            .then()
-            .catch(error => (error))
-    }
-    const url = (`http://localhost:5000/cart?email=${user?.email}`)
-    useEffect(() => {
-        fetch(url)
-            .then(res => res.json())
-            .then(data => setCart(data))
-    }, [cart])
 
 
     return (

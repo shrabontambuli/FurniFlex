@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const Home = () => {
-    const { user, product, active, setActive, handleChair, handleClothing, handleElectronics } = useContext(AuthContext);
+    const { user, product, active, setActive, handleChair, handleClothing, handleElectronics, setCart, cart } = useContext(AuthContext);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -17,16 +17,28 @@ const Home = () => {
                 email: user.email,
                 name: p.name,
                 picture: p.picture,
-                price: p.price
+                price: Number(p.price),
+                stock: p.stock,
+                quantity: 1
             }
             axios.post('http://localhost:5000/cart', cartItem)
                 .then(res => {
-                    if (res.data.insertedId) {
-                        refetch();
+                    console.log({res})
+                    if (res.data._id) {
+                        setCart((prev) => [...prev, res.data]);
                         Swal.fire({
                             position: "center",
                             icon: "success",
                             title: "Added to your cart",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                    else{
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Already added to your cart",
                             showConfirmButton: false,
                             timer: 1500
                         });

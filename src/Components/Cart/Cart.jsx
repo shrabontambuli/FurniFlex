@@ -5,18 +5,30 @@ import Swal from 'sweetalert2';
 
 const Cart = () => {
     const { user, cart, setCart } = useContext(AuthContext);
-    const [quantity, setQuantity] = useState(1);
+
+
+    const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
     // Function to increase the quantity
-    const increaseQuantity = () => {
-        setQuantity(prevQuantity => prevQuantity + 1);
+    const increaseQuantity = (id) => {
+        const updatedQuantity = cart.map(item => {
+            if (item._id === id) {
+                return { ...item, quantity: item.quantity + 1 };
+            }
+            return item;
+        })
+        setCart(updatedQuantity);
     };
 
     // Function to decrease the quantity
-    const decreaseQuantity = () => {
-        if (quantity > 1) {
-            setQuantity(prevQuantity => prevQuantity - 1);
-        }
+    const decreaseQuantity = (id) => {
+        const updatedQuantity = cart.map(item => {
+            if (item._id === id && item.quantity > 1) {
+                return { ...item, quantity: item.quantity - 1 };
+            }
+            return item;
+        })
+        setCart(updatedQuantity);
     };
 
     useEffect(() => {
@@ -46,7 +58,6 @@ const Cart = () => {
                                 'success'
                             )
                         }
-                        
                         axios.get(`http://localhost:5000/cart?email=${user.email}`)
                             .then(res => {
                                 setCart(res.data)
@@ -69,11 +80,11 @@ const Cart = () => {
                                     <div className='flex gap-4'>
                                         <div className='flex items-center gap-6'>
                                             <div className='bg-white border border-[#DEDEDE] rounded-xl h-12 w-24 text-center py-2'>
-                                                <button className='text-xl' onClick={decreaseQuantity} disabled={quantity === 1}>
+                                                <button className='text-xl' onClick={() => decreaseQuantity(p._id)}>
                                                     -
                                                 </button>
-                                                <span className='font-semibold' style={{ margin: '0 10px' }}>{quantity}</span>
-                                                <button className='text-xl' onClick={increaseQuantity}>+</button>
+                                                <span className='font-semibold' style={{ margin: '0 10px' }}>{p.quantity}</span>
+                                                <button className='text-xl' onClick={() => increaseQuantity(p._id)}>+</button>
                                             </div>
                                             <div className='w-20 h-20 bg-[#F2F2F2] flex justify-center items-center rounded-lg mx-auto'>
                                                 <img
@@ -90,7 +101,7 @@ const Cart = () => {
                                         <img onClick={() => handleDelete(p)} src="/icons/x.png" alt="" />
                                     </div>
                                 </div>
-                                <h1 className='text-xl font-bold text-right mt-3'>€{p?.price}.00</h1>
+                                <h1 className='text-xl font-bold text-right mt-3'>€{p?.price * p.quantity}.00</h1>
                             </div>)
                     }
                 </div>
@@ -100,20 +111,21 @@ const Cart = () => {
                 <div className='bg-[#DEDEDE] rounded-xl p-4 border border-[#ECECEC] mt-7'>
                     <div className='flex justify-between items-center'>
                         <p className='text-[#656565]'>Subtotal</p>
-                        <p className='text-[#656565]'>€ 1071.00</p>
+                        {/* <p className='text-[#656565]'>€ 1071.00</p> */}
+                        <p className='text-[#656565]'>€ {totalPrice}.00</p>
                     </div>
                     <div className='flex justify-between items-center mt-2'>
                         <p className='text-[#656565]'>Shipping</p>
                         <p className='text-[#656565]'>Free</p>
                     </div>
                     <div className='flex justify-between items-center mt-2'>
-                        <p className='inline-flex items-center text-[#656565]'>Estimated Tax <img src="/icons/tax.png" alt="" /></p>
+                        <p className='inline-flex items-center gap-2 text-[#656565]'>Estimated Tax <img src="/icons/tax.png" alt="" /></p>
                         <p className='text-[#656565]'>€ -</p>
                     </div>
                     <hr className='bg-[#DEDEDE] my-4' />
                     <div className='flex justify-between items-center text-xl font-medium'>
                         <p className='text-[#656565]'>Total</p>
-                        <p className='text-black'>€ 1071.00</p>
+                        <p className='text-black'>€ {totalPrice}.00</p>
                     </div>
                 </div>
                 <div className="card-actions mt-5">
