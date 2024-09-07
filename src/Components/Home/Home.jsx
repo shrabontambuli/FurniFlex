@@ -5,11 +5,10 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const Home = () => {
-    const { user, product, active, setActive, handleChair, handleClothing, handleElectronics, setCart } = useContext(AuthContext);
+    const { user, product, active, setActive, handleChair, handleClothing, handleElectronics, setCart, handleNextPage,handlePrevPage } = useContext(AuthContext);
+
     const navigate = useNavigate();
     const location = useLocation();
-
-    // Add to cart with condition //
 
     const handleAddToCart = (p) => {
         if (user && user.email) {
@@ -23,7 +22,7 @@ const Home = () => {
                 stock: p.stock,
                 quantity: 1
             }
-            axios.post('http://localhost:5000/cart', cartItem)
+            axios.post('https://furnil-flex-server.vercel.app/cart', cartItem)
                 .then(res => {
                     if (res.data._id) {
                         setCart((prev) => [...prev, res.data]);
@@ -64,6 +63,7 @@ const Home = () => {
             });
         }
     }
+
 
 
     return (
@@ -112,7 +112,8 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className='flex justify-center mt-14'>
+            <div className='flex justify-center gap-2 mt-14'>
+                <button onClick={handlePrevPage} className='btn'>Prev</button>
                 <div className="join">
                     <button className="join-item btn">1</button>
                     <button className="join-item btn">2</button>
@@ -120,6 +121,7 @@ const Home = () => {
                     <button className="join-item btn">99</button>
                     <button className="join-item btn">100</button>
                 </div>
+                <button onClick={handleNextPage} className='btn'>Next</button>
             </div>
         </div>
     );

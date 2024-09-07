@@ -23,7 +23,7 @@ const SignUp = () => {
                 })
                 const saveUser = { first_ame: data.firstName, last_ame: data.lastName, email: data.email, check: data.checked }
                 console.log(saveUser);
-                axios.post('http://localhost:5000/users', saveUser)
+                axios.post('https://furnil-flex-server.vercel.app/users', saveUser)
                     .then(data => {
                         if (data.data.insertedId) {
                             navigate(from);
@@ -43,7 +43,7 @@ const SignUp = () => {
             .then(result => {
                 const loggedInUser = result.user;
                 const saveUser = { name: loggedInUser.displayName, email: loggedInUser.email }
-                axios.post('http://localhost:5000/users', saveUser)
+                axios.post('https://furnil-flex-server.vercel.app/users', saveUser)
                     .then((data) => {
                         if (data.data.insertedId) {
                             navigate(from);

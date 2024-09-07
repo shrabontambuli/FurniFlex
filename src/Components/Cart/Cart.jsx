@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect} from 'react';
 import { AuthContext } from '../../providers/AuthProvider';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -9,7 +9,7 @@ const Cart = () => {
     // fetching user add to cart her data //
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/cart?email=${user.email}`)
+        axios.get(`https://furnil-flex-server.vercel.app/cart?email=${user.email}`)
             .then(res => {
                 setCart(res.data);
             });
@@ -28,7 +28,7 @@ const Cart = () => {
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(`http://localhost:5000/cart/${item._id}`)
+                axios.delete(`https://furnil-flex-server.vercel.app/cart/${item._id}`)
                     .then(data => {
                         if (data?.data?.deletedCount > 0) {
                             Swal.fire(
@@ -37,7 +37,7 @@ const Cart = () => {
                                 'success'
                             )
                         }
-                        axios.get(`http://localhost:5000/cart?email=${user.email}`)
+                        axios.get(`https://furnil-flex-server.vercel.app/cart?email=${user.email}`)
                             .then(res => {
                                 setCart(res.data)
                             });

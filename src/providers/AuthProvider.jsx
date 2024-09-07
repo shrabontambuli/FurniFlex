@@ -21,7 +21,7 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    
+
     // Authentication System //
 
     const createUser = (email, password) => {
@@ -59,7 +59,7 @@ const AuthProvider = ({ children }) => {
     // fetch databases data //
 
     useEffect(() => {
-        axios.get('http://localhost:5000/products')
+        axios.get("https://furnil-flex-server.vercel.app/products")
             .then(res => {
                 setProductData(res.data);
                 setProduct(res.data);
@@ -93,6 +93,25 @@ const AuthProvider = ({ children }) => {
         logOut()
             .then()
             .catch(error => (error))
+    }
+
+    const handlePrevPage = () => {
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Not Working",
+            showConfirmButton: false,
+            timer: 1500
+        });
+    }
+    const handleNextPage = () => {
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Not Working",
+            showConfirmButton: false,
+            timer: 1500
+        });
     }
 
     // Function to increase the quantity
@@ -139,7 +158,9 @@ const AuthProvider = ({ children }) => {
         handleElectronics,
         totalPrice,
         increaseQuantity,
-        decreaseQuantity
+        decreaseQuantity,
+        handleNextPage,
+        handlePrevPage
     };
 
     return (

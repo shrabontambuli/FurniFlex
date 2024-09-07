@@ -31,7 +31,7 @@ const LogIn = () => {
             .then(result => {
                 const loggedInUser = result.user;
                 const saveUser = { name: loggedInUser.displayName, email: loggedInUser.email }
-                axios.post('http://localhost:5000/users', saveUser)
+                axios.post('https://furnil-flex-server.vercel.app/users', saveUser)
                     .then((data) => {
                         if (data.data.message) {
                             navigate(from);
