@@ -29,6 +29,7 @@ const LogIn = () => {
     const handleGoogle = () => {
         googleSignIn()
             .then(result => {
+                console.log(result)
                 const loggedInUser = result.user;
                 const saveUser = { name: loggedInUser.displayName, email: loggedInUser.email }
                 axios.post('https://furnil-flex-server.vercel.app/users', saveUser)

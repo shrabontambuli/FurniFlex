@@ -84,9 +84,6 @@ const AuthProvider = ({ children }) => {
         setProduct(clothingData);
     };
 
-    // cart pricing //
-
-    const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
     // function System
     const handleLogOut = () => {
@@ -95,24 +92,6 @@ const AuthProvider = ({ children }) => {
             .catch(error => (error))
     }
 
-    const handlePrevPage = () => {
-        Swal.fire({
-            position: "center",
-            icon: "error",
-            title: "Not Working",
-            showConfirmButton: false,
-            timer: 1500
-        });
-    }
-    const handleNextPage = () => {
-        Swal.fire({
-            position: "center",
-            icon: "error",
-            title: "Not Working",
-            showConfirmButton: false,
-            timer: 1500
-        });
-    }
 
     // Function to increase the quantity
     const increaseQuantity = (id) => {
@@ -136,6 +115,9 @@ const AuthProvider = ({ children }) => {
         setCart(updatedQuantity);
     };
 
+    // cart pricing //
+
+    const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
 
     const authInfo = {
@@ -158,9 +140,7 @@ const AuthProvider = ({ children }) => {
         handleElectronics,
         totalPrice,
         increaseQuantity,
-        decreaseQuantity,
-        handleNextPage,
-        handlePrevPage
+        decreaseQuantity
     };
 
     return (

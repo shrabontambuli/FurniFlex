@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 
 const Home = () => {
-    const { user, product, active, setActive, handleChair, handleClothing, handleElectronics, setCart, handleNextPage,handlePrevPage } = useContext(AuthContext);
+    const { user, product, active, setActive, handleChair, handleClothing, handleElectronics, setCart } = useContext(AuthContext);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -113,7 +113,7 @@ const Home = () => {
                 </div>
             </div>
             <div className='flex justify-center gap-2 mt-14'>
-                <button onClick={handlePrevPage} className='btn'>Prev</button>
+                <button className='btn'>Prev</button>
                 <div className="join">
                     <button className="join-item btn">1</button>
                     <button className="join-item btn">2</button>
@@ -121,7 +121,7 @@ const Home = () => {
                     <button className="join-item btn">99</button>
                     <button className="join-item btn">100</button>
                 </div>
-                <button onClick={handleNextPage} className='btn'>Next</button>
+                <button className='btn'>Next</button>
             </div>
         </div>
     );
