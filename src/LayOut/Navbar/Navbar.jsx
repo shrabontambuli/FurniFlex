@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 import Logo from "/icons/Logo.png";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../../providers/AuthProvider";
+import axios from "axios";
 
 const Navbar = () => {
-    const { user, cart, handleLogOut } = useContext(AuthContext);
+    const { user, cart, setCart, handleLogOut } = useContext(AuthContext);
 
     const navOptions = <>
         <li className="text-xl font-medium"><Link to="/">Home</Link></li>
@@ -13,7 +14,6 @@ const Navbar = () => {
         <li className="text-xl font-medium"><Link to="/">Custom</Link></li>
         <li className="text-xl font-medium"><Link to="/">Blog</Link></li>
     </>
-
 
     return (
         <div className="border-b-2">
